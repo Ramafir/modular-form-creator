@@ -1,10 +1,16 @@
-import type { CATEGORIES, PRIORITIES, RESOURCE_STATUSES, TEAM_MEMBERS } from './constants'
+import type {
+  CATEGORIES,
+  PRIORITIES,
+  RESOURCE_STATUSES,
+  SORT_ORDERS,
+  TEAM_MEMBERS,
+} from './constants'
 
 export type ResourceStatus = (typeof RESOURCE_STATUSES)[number]
 export type Priority = (typeof PRIORITIES)[number]
 export type Category = (typeof CATEGORIES)[number]
 export type TeamMember = (typeof TEAM_MEMBERS)[number]
-export type SortOrder = 'asc' | 'desc'
+export type SortOrder = (typeof SORT_ORDERS)[number]
 
 /** Numeric `resourceId`: a number in API data, a string when read from the URL. */
 export type ResourceId = number | string

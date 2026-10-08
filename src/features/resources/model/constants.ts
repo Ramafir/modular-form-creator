@@ -2,6 +2,8 @@
 
 export const RESOURCE_STATUSES = ['draft', 'completed'] as const
 
+export const SORT_ORDERS = ['desc', 'asc'] as const
+
 export const PRIORITIES = ['low', 'medium', 'high'] as const
 
 export const CATEGORIES = ['internal', 'external', 'vendor'] as const
