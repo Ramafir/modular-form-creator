@@ -14,6 +14,7 @@ import { CreateResourceForm } from '../components/CreateResourceForm'
 import { ResourceFilters } from '../components/ResourceFilters'
 import { ResourcesTable } from '../components/ResourcesTable'
 import { useResourceListSearch } from '../hooks/useResourceListSearch'
+import { usePendingChangesStore } from '../pending-changes/usePendingChanges'
 
 const SEARCH_DEBOUNCE_MS = 300
 
@@ -24,6 +25,7 @@ export function ResourcesListPage() {
     resourceQueries.list({ ...search, name: debouncedName }),
   )
   const deleteResource = useDeleteResource()
+  const { discard } = usePendingChangesStore()
 
   // The backend clamps out-of-range pages (e.g. after deleting the last item on
   // the last page), so keep the URL in sync with the page actually returned.
@@ -80,7 +82,11 @@ export function ResourcesListPage() {
           resources={data.items}
           isRefreshing={isPlaceholderData}
           deletingId={deleteResource.isPending ? deleteResource.variables : undefined}
-          onDelete={(resource) => deleteResource.mutate(resource.resourceId)}
+          onDelete={(resource) =>
+            deleteResource.mutate(resource.resourceId, {
+              onSuccess: () => discard(resource._id),
+            })
+          }
         />
         <Pagination
           {...data.pagination}

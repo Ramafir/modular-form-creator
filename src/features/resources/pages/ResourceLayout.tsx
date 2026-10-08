@@ -6,6 +6,7 @@ import { LoadingState } from '../../../shared/ui/LoadingState'
 import { Page } from '../../../shared/ui/Page'
 import { StatusMessage } from '../../../shared/ui/StatusMessage'
 import { resourceQueries } from '../api/resourceQueries'
+import { PendingChangesBanner } from '../components/PendingChangesBanner'
 import { ResourceHeader } from '../components/ResourceHeader'
 import { resourcePaths } from '../paths'
 
@@ -38,6 +39,7 @@ export function ResourceLayout() {
   return (
     <Page>
       <ResourceHeader resource={resource} />
+      <PendingChangesBanner resource={resource} />
       {/* Remount nested pages per resource, so form state never leaks between resources. */}
       <Outlet key={resource._id} context={resource} />
     </Page>

@@ -1,61 +1,20 @@
-import type { ReactNode } from 'react'
 import styled from 'styled-components'
 import { Badge, Card } from '../../../design-system'
-import { formatInteger } from '../../../shared/lib/formatNumber'
-import {
-  BASIC_INFO_FIELD_LABELS,
-  CATEGORY_LABELS,
-  PRIORITY_LABELS,
-  PROJECT_DETAILS_FIELD_LABELS,
-} from '../model/labels'
+import { getModuleFields, getModuleUpdate, type FieldValue } from '../model/moduleFields'
 import { getModuleState, type ResourceModule } from '../model/modules'
-import type { ModuleKey, Resource } from '../model/types'
+import type { Resource } from '../model/types'
 import { ModuleStateBadge } from './ModuleStateBadge'
 
-interface SummaryItem {
-  label: string
-  /** Falsy values are rendered as "Not provided". */
-  value: ReactNode
-}
-
-const SUMMARY_ITEMS: Record<ModuleKey, (resource: Resource) => SummaryItem[]> = {
-  basicInfo: ({ basicInfo }) => [
-    { label: BASIC_INFO_FIELD_LABELS.resourceName, value: basicInfo.resourceName },
-    { label: BASIC_INFO_FIELD_LABELS.owner, value: basicInfo.owner },
-    { label: BASIC_INFO_FIELD_LABELS.email, value: basicInfo.email },
-    {
-      label: BASIC_INFO_FIELD_LABELS.priority,
-      value: basicInfo.priority && PRIORITY_LABELS[basicInfo.priority],
-    },
-    {
-      label: BASIC_INFO_FIELD_LABELS.description,
-      value: basicInfo.description && <Multiline>{basicInfo.description}</Multiline>,
-    },
-  ],
-  projectDetails: ({ projectDetails }) => [
-    {
-      label: PROJECT_DETAILS_FIELD_LABELS.projectName,
-      value: projectDetails.projectName,
-    },
-    {
-      label: PROJECT_DETAILS_FIELD_LABELS.budget,
-      value: projectDetails.budget && formatInteger(projectDetails.budget),
-    },
-    {
-      label: PROJECT_DETAILS_FIELD_LABELS.category,
-      value: projectDetails.category && CATEGORY_LABELS[projectDetails.category],
-    },
-    {
-      label: PROJECT_DETAILS_FIELD_LABELS.options,
-      value: projectDetails.options.length > 0 && (
-        <TeamMembers>
-          {projectDetails.options.map((member) => (
-            <Badge key={member}>{member}</Badge>
-          ))}
-        </TeamMembers>
-      ),
-    },
-  ],
+const renderValue = (value: FieldValue) => {
+  if (value.length === 0) return <NotProvided>Not provided</NotProvided>
+  if (typeof value === 'string') return value
+  return (
+    <Tags>
+      {value.map((item) => (
+        <Badge key={item}>{item}</Badge>
+      ))}
+    </Tags>
+  )
 }
 
 interface ModuleSummaryProps {
@@ -64,6 +23,8 @@ interface ModuleSummaryProps {
 }
 
 export function ModuleSummary({ resource, module }: ModuleSummaryProps) {
+  const fields = getModuleFields(getModuleUpdate(resource, module.key))
+
   return (
     <Card>
       <Header>
@@ -71,10 +32,10 @@ export function ModuleSummary({ resource, module }: ModuleSummaryProps) {
         <ModuleStateBadge state={getModuleState(resource, module)} />
       </Header>
       <List>
-        {SUMMARY_ITEMS[module.key](resource).map(({ label, value }) => (
-          <Row key={label}>
+        {fields.map(({ key, label, display }) => (
+          <Row key={key}>
             <dt>{label}</dt>
-            <dd>{value || <NotProvided>Not provided</NotProvided>}</dd>
+            <dd>{renderValue(display)}</dd>
           </Row>
         ))}
       </List>
@@ -110,6 +71,7 @@ const Row = styled.div`
   dd {
     margin: 0;
     overflow-wrap: anywhere;
+    white-space: pre-line;
     color: ${({ theme }) => theme.colors.inkStrong};
   }
 
@@ -119,11 +81,7 @@ const Row = styled.div`
   }
 `
 
-const Multiline = styled.span`
-  white-space: pre-line;
-`
-
-const TeamMembers = styled.span`
+const Tags = styled.span`
   display: inline-flex;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.xs};

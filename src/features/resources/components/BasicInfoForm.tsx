@@ -14,6 +14,7 @@ import {
 } from '../model/schemas'
 import type { Resource } from '../model/types'
 import { resourcePaths } from '../paths'
+import { usePendingChanges } from '../pending-changes/usePendingChanges'
 import { ModuleFormShell } from './ModuleFormShell'
 
 const PRIORITY_OPTIONS = toSelectOptions(PRIORITIES, PRIORITY_LABELS, 'Select a priority')
@@ -24,7 +25,8 @@ interface BasicInfoFormProps {
 
 export function BasicInfoForm({ resource }: BasicInfoFormProps) {
   const navigate = useNavigate()
-  const { submit, isSubmitting, error } = useModuleSubmit(resource)
+  const { changes } = usePendingChanges(resource)
+  const { submit, isBuffered, isSubmitting, error } = useModuleSubmit(resource)
   const {
     register,
     control,
@@ -33,7 +35,7 @@ export function BasicInfoForm({ resource }: BasicInfoFormProps) {
   } = useForm({
     resolver: zodResolver(basicInfoSchema),
     // `resourceName` is ignored here: the schema strips fields it does not define.
-    defaultValues: resource.basicInfo,
+    defaultValues: changes.basicInfo ?? resource.basicInfo,
   })
   const description = useWatch({ control, name: 'description' })
 
@@ -41,6 +43,7 @@ export function BasicInfoForm({ resource }: BasicInfoFormProps) {
     <ModuleFormShell
       module={BASIC_INFO_MODULE}
       submitLabel="Save Basic Info"
+      isBuffered={isBuffered}
       isSubmitting={isSubmitting}
       error={error}
       onSubmit={handleSubmit((values) =>

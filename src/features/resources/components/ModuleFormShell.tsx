@@ -6,7 +6,10 @@ import type { ResourceModule } from '../model/modules'
 
 interface ModuleFormShellProps {
   module: ResourceModule
+  /** Label used when the form saves straight to the API (draft resources). */
   submitLabel: string
+  /** Completed resources keep edits locally until they are submitted. */
+  isBuffered: boolean
   isSubmitting: boolean
   error?: string
   onSubmit: FormEventHandler<HTMLFormElement>
@@ -18,18 +21,26 @@ interface ModuleFormShellProps {
 export function ModuleFormShell({
   module,
   submitLabel,
+  isBuffered,
   isSubmitting,
   error,
   onSubmit,
   onCancel,
   children,
 }: ModuleFormShellProps) {
+  const idleLabel = isBuffered ? 'Keep changes' : submitLabel
+
   return (
     <FormCard>
       <div>
         <h2>{module.title}</h2>
         <Description>{module.description}</Description>
       </div>
+      {isBuffered ? (
+        <Alert variant="info" title="This resource is completed">
+          Your edits are kept in this browser tab and saved only when you submit them.
+        </Alert>
+      ) : null}
       <Form onSubmit={onSubmit} noValidate>
         {children}
         {error ? <Alert title="Changes could not be saved">{error}</Alert> : null}
@@ -38,7 +49,7 @@ export function ModuleFormShell({
             Cancel
           </Button>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Saving…' : submitLabel}
+            {isSubmitting ? 'Saving…' : idleLabel}
           </Button>
         </Actions>
       </Form>

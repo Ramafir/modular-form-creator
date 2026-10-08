@@ -38,6 +38,11 @@ export const RESOURCE_MODULES: readonly ResourceModule[] = [
   PROJECT_DETAILS_MODULE,
 ]
 
+export const RESOURCE_MODULES_BY_KEY: Record<ModuleKey, ResourceModule> = {
+  basicInfo: BASIC_INFO_MODULE,
+  projectDetails: PROJECT_DETAILS_MODULE,
+}
+
 export const getModuleProgress = (resource: Resource) => ({
   completed: RESOURCE_MODULES.filter(({ isComplete }) => isComplete(resource)).length,
   total: RESOURCE_MODULES.length,
