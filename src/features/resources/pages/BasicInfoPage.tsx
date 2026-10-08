@@ -1,3 +1,8 @@
+import { BasicInfoForm } from '../components/BasicInfoForm'
+import { useCurrentResource } from '../hooks/useCurrentResource'
+
 export function BasicInfoPage() {
-  return <h2>Basic Info</h2>
+  const resource = useCurrentResource()
+
+  return <BasicInfoForm resource={resource} />
 }
