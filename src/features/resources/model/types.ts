@@ -38,6 +38,11 @@ export interface ResourceModules {
 
 export type ModuleKey = keyof ResourceModules
 
+/** A module key paired with its data, e.g. `{ moduleKey: 'basicInfo', data: BasicInfo }`. */
+export type ModuleUpdate = {
+  [K in ModuleKey]: { moduleKey: K; data: ResourceModules[K] }
+}[ModuleKey]
+
 export interface Resource extends ResourceModules {
   _id: string
   resourceId: number

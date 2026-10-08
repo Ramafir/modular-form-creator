@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type {
-  ModuleKey,
+  ModuleUpdate,
   Resource,
   ResourceId,
-  ResourceModules,
   ResourceReplacePayload,
 } from '../model/types'
 import { resourceKeys, resourceQueries } from './resourceQueries'
@@ -55,10 +54,7 @@ export function useDeleteResource() {
   })
 }
 
-/** Correlates `moduleKey` with its data shape, e.g. `basicInfo` -> `BasicInfo`. */
-type UpdateModuleVariables = {
-  [K in ModuleKey]: { resourceId: ResourceId; moduleKey: K; data: ResourceModules[K] }
-}[ModuleKey]
+type UpdateModuleVariables = ModuleUpdate & { resourceId: ResourceId }
 
 export function useUpdateModule() {
   const cache = useResourceCache()
