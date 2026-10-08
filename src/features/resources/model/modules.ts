@@ -8,24 +8,34 @@ import type { ModuleKey, Resource } from './types'
 export interface ResourceModule {
   key: ModuleKey
   title: string
+  description: string
   isComplete: (resource: Resource) => boolean
   isLocked: (resource: Resource) => boolean
+  /** Explains how to unlock the module. */
+  lockedHint?: string
 }
 
-/** Single source of truth for the modules a resource is built from. */
+export const BASIC_INFO_MODULE: ResourceModule = {
+  key: 'basicInfo',
+  title: 'Basic Info',
+  description: 'Owner, contact email, description and priority.',
+  isComplete: (resource) => isBasicInfoComplete(resource.basicInfo),
+  isLocked: () => false,
+}
+
+export const PROJECT_DETAILS_MODULE: ResourceModule = {
+  key: 'projectDetails',
+  title: 'Project Details',
+  description: 'Project name, budget, category and team members.',
+  isComplete: (resource) => isProjectDetailsComplete(resource.projectDetails),
+  isLocked: isProjectDetailsLocked,
+  lockedHint: 'Complete Basic Info first',
+}
+
+/** Single source of truth for the modules a resource is built from, in workflow order. */
 export const RESOURCE_MODULES: readonly ResourceModule[] = [
-  {
-    key: 'basicInfo',
-    title: 'Basic Info',
-    isComplete: (resource) => isBasicInfoComplete(resource.basicInfo),
-    isLocked: () => false,
-  },
-  {
-    key: 'projectDetails',
-    title: 'Project Details',
-    isComplete: (resource) => isProjectDetailsComplete(resource.projectDetails),
-    isLocked: isProjectDetailsLocked,
-  },
+  BASIC_INFO_MODULE,
+  PROJECT_DETAILS_MODULE,
 ]
 
 export const getModuleProgress = (resource: Resource) => ({

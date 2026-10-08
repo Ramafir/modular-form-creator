@@ -38,7 +38,8 @@ export function ResourceLayout() {
   return (
     <Page>
       <ResourceHeader resource={resource} />
-      <Outlet context={resource} />
+      {/* Remount nested pages per resource, so form state never leaks between resources. */}
+      <Outlet key={resource._id} context={resource} />
     </Page>
   )
 }
