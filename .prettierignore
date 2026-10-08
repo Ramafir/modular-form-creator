@@ -1,0 +1,5 @@
+# Provided code that must stay untouched
+backend
+src/design-system
+
+package-lock.json
