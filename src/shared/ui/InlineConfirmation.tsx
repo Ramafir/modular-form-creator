@@ -6,8 +6,9 @@ interface InlineConfirmationProps {
   /** Accessible name of the group; defaults to the message. */
   label?: string
   confirmLabel: string
-  pendingLabel: string
-  isPending: boolean
+  /** Shown on the confirm button while an async action runs. */
+  pendingLabel?: string
+  isPending?: boolean
   size?: ButtonSize
   onConfirm: () => void
   onCancel: () => void
@@ -18,8 +19,8 @@ export function InlineConfirmation({
   message,
   label = message,
   confirmLabel,
-  pendingLabel,
-  isPending,
+  pendingLabel = confirmLabel,
+  isPending = false,
   size = 'small',
   onConfirm,
   onCancel,

@@ -10,7 +10,7 @@ import { ModuleProgress } from './ModuleProgress'
 
 const getHint = (resource: Resource) => {
   if (isCompleted(resource)) {
-    return 'This resource has been provisioned and cannot be provisioned again.'
+    return 'This resource has been provisioned and cannot be provisioned again. Module edits are kept in this browser tab and saved together in one update.'
   }
   return canProvision(resource)
     ? 'Both modules are complete. Provisioning marks this resource as completed.'
