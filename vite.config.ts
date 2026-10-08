@@ -9,9 +9,14 @@ import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
+// Backend CORS allows only http://localhost:5173, so fail fast instead of silently switching ports.
+const serverOptions = { port: 5173, strictPort: true };
+
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
+  server: serverOptions,
+  preview: serverOptions,
   test: {
     projects: [{
       extends: true,
