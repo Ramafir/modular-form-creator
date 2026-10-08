@@ -10,6 +10,7 @@ import { PROJECT_DETAILS_MODULE } from '../model/modules'
 import { NAME_MAX_LENGTH, projectDetailsSchema } from '../model/schemas'
 import type { Resource } from '../model/types'
 import { resourcePaths } from '../paths'
+import { usePendingChanges } from '../pending-changes/usePendingChanges'
 import { ModuleFormShell } from './ModuleFormShell'
 
 const CATEGORY_OPTIONS = toSelectOptions(CATEGORIES, CATEGORY_LABELS, 'Select a category')
@@ -21,7 +22,8 @@ interface ProjectDetailsFormProps {
 
 export function ProjectDetailsForm({ resource }: ProjectDetailsFormProps) {
   const navigate = useNavigate()
-  const { submit, isSubmitting, error } = useModuleSubmit(resource)
+  const { changes } = usePendingChanges(resource)
+  const { submit, isBuffered, isSubmitting, error } = useModuleSubmit(resource)
   const {
     register,
     control,
@@ -29,13 +31,14 @@ export function ProjectDetailsForm({ resource }: ProjectDetailsFormProps) {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(projectDetailsSchema),
-    defaultValues: resource.projectDetails,
+    defaultValues: changes.projectDetails ?? resource.projectDetails,
   })
 
   return (
     <ModuleFormShell
       module={PROJECT_DETAILS_MODULE}
       submitLabel="Save Project Details"
+      isBuffered={isBuffered}
       isSubmitting={isSubmitting}
       error={error}
       onSubmit={handleSubmit((data) => submit({ moduleKey: 'projectDetails', data }))}
