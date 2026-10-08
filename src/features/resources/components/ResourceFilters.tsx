@@ -1,29 +1,25 @@
 import styled from 'styled-components'
-import { Input, Select, type SelectOption } from '../../../design-system'
+import { Input, Select } from '../../../design-system'
 import { isOneOf } from '../../../shared/lib/isOneOf'
+import { toSelectOptions } from '../../../shared/lib/toSelectOptions'
 import type { UpdateListSearch } from '../hooks/useResourceListSearch'
 import { RESOURCE_STATUSES, SORT_ORDERS } from '../model/constants'
 import { RESOURCE_STATUS_LABELS } from '../model/labels'
 import type { ResourceListSearch } from '../model/listSearch'
 import type { SortOrder } from '../model/types'
 
-const STATUS_OPTIONS: SelectOption[] = [
-  { value: '', label: 'All statuses' },
-  ...RESOURCE_STATUSES.map((status) => ({
-    value: status,
-    label: RESOURCE_STATUS_LABELS[status],
-  })),
-]
+const STATUS_OPTIONS = toSelectOptions(
+  RESOURCE_STATUSES,
+  RESOURCE_STATUS_LABELS,
+  'All statuses',
+)
 
 const SORT_ORDER_LABELS: Record<SortOrder, string> = {
   desc: 'Newest first',
   asc: 'Oldest first',
 }
 
-const SORT_OPTIONS: SelectOption[] = SORT_ORDERS.map((sortOrder) => ({
-  value: sortOrder,
-  label: SORT_ORDER_LABELS[sortOrder],
-}))
+const SORT_OPTIONS = toSelectOptions(SORT_ORDERS, SORT_ORDER_LABELS)
 
 interface ResourceFiltersProps {
   search: ResourceListSearch
