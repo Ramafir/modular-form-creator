@@ -10,11 +10,13 @@
     "typecheck": "tsc -b",
     "format": "prettier --write src",
     "format:check": "prettier --check src",
+    "test": "vitest run --project unit",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@tanstack/react-query": "5.104.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-router-dom": "7.15.1",

@@ -1,12 +1,11 @@
-type ResourceIdParam = number | string
+import type { ResourceId } from './model/types'
 
-const overview = (resourceId: ResourceIdParam) => `/resources/${resourceId}`
+const overview = (resourceId: ResourceId) => `/resources/${resourceId}`
 
 export const resourcePaths = {
   list: '/resources',
   overview,
-  details: (resourceId: ResourceIdParam) => `${overview(resourceId)}/details`,
-  basicInfo: (resourceId: ResourceIdParam) => `${overview(resourceId)}/basic-info`,
-  projectDetails: (resourceId: ResourceIdParam) =>
-    `${overview(resourceId)}/project-details`,
+  details: (resourceId: ResourceId) => `${overview(resourceId)}/details`,
+  basicInfo: (resourceId: ResourceId) => `${overview(resourceId)}/basic-info`,
+  projectDetails: (resourceId: ResourceId) => `${overview(resourceId)}/project-details`,
 }
