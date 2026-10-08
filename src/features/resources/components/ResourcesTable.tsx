@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Button, Card, IconButton } from '../../../design-system'
+import { Card, IconButton } from '../../../design-system'
 import { formatDateTime } from '../../../shared/lib/formatDate'
+import { InlineConfirmation } from '../../../shared/ui/InlineConfirmation'
 import { TextLink } from '../../../shared/ui/TextLink'
 import type { Resource, ResourceId } from '../model/types'
 import { resourcePaths } from '../paths'
@@ -54,9 +55,12 @@ export function ResourcesTable({
               <td>{formatDateTime(resource.createdAt)}</td>
               <ActionsCell>
                 {confirmingId === resource._id ? (
-                  <DeleteConfirmation
-                    resourceName={resource.name}
-                    isDeleting={deletingId === resource.resourceId}
+                  <InlineConfirmation
+                    message="Delete?"
+                    label={`Confirm deleting ${resource.name}`}
+                    confirmLabel="Delete"
+                    pendingLabel="Deleting…"
+                    isPending={deletingId === resource.resourceId}
                     onConfirm={() => onDelete(resource)}
                     onCancel={() => setConfirmingId(null)}
                   />
@@ -77,46 +81,6 @@ export function ResourcesTable({
         </tbody>
       </Table>
     </TableCard>
-  )
-}
-
-interface DeleteConfirmationProps {
-  resourceName: string
-  isDeleting: boolean
-  onConfirm: () => void
-  onCancel: () => void
-}
-
-function DeleteConfirmation({
-  resourceName,
-  isDeleting,
-  onConfirm,
-  onCancel,
-}: DeleteConfirmationProps) {
-  return (
-    <Confirmation
-      role="group"
-      aria-label={`Confirm deleting ${resourceName}`}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape') onCancel()
-      }}
-    >
-      <span>Delete?</span>
-      <Button
-        type="button"
-        variant="secondary"
-        size="small"
-        // Cancel is the safe default for keyboard users.
-        autoFocus
-        disabled={isDeleting}
-        onClick={onCancel}
-      >
-        Cancel
-      </Button>
-      <Button type="button" size="small" disabled={isDeleting} onClick={onConfirm}>
-        {isDeleting ? 'Deleting…' : 'Delete'}
-      </Button>
-    </Confirmation>
   )
 }
 
@@ -168,10 +132,4 @@ const ActionsCell = styled.td`
   width: 1%;
   white-space: nowrap;
   text-align: right;
-`
-
-const Confirmation = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
 `

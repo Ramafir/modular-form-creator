@@ -1,3 +1,3 @@
 export function BasicInfoPage() {
-  return <h1>Basic Info</h1>
+  return <h2>Basic Info</h2>
 }

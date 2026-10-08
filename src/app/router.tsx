@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { BasicInfoPage } from '../features/resources/pages/BasicInfoPage'
 import { ProjectDetailsPage } from '../features/resources/pages/ProjectDetailsPage'
 import { ResourceDetailsPage } from '../features/resources/pages/ResourceDetailsPage'
+import { ResourceLayout } from '../features/resources/pages/ResourceLayout'
 import { ResourceOverviewPage } from '../features/resources/pages/ResourceOverviewPage'
 import { ResourcesListPage } from '../features/resources/pages/ResourcesListPage'
 import { resourcePaths } from '../features/resources/paths'
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
           { path: 'resources', element: <ResourcesListPage /> },
           {
             path: 'resources/:resourceId',
+            element: <ResourceLayout />,
             children: [
               { index: true, element: <ResourceOverviewPage /> },
               { path: 'details', element: <ResourceDetailsPage /> },

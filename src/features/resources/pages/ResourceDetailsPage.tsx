@@ -1,3 +1,11 @@
+import { ModuleSummary } from '../components/ModuleSummary'
+import { useCurrentResource } from '../hooks/useCurrentResource'
+import { RESOURCE_MODULES } from '../model/modules'
+
 export function ResourceDetailsPage() {
-  return <h1>Resource details</h1>
+  const resource = useCurrentResource()
+
+  return RESOURCE_MODULES.map((module) => (
+    <ModuleSummary key={module.key} resource={resource} module={module} />
+  ))
 }

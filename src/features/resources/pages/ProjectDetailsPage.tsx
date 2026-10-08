@@ -1,3 +1,3 @@
 export function ProjectDetailsPage() {
-  return <h1>Project Details</h1>
+  return <h2>Project Details</h2>
 }
