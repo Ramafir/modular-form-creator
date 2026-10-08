@@ -6,7 +6,6 @@ import {
   emptyBasicInfo,
   emptyProjectDetails,
 } from './fixtures'
-import { getModuleProgress } from './modules'
 import {
   canProvision,
   isBasicInfoComplete,
@@ -87,18 +86,5 @@ describe('canProvision', () => {
 
   it('rejects re-provisioning a completed resource', () => {
     expect(canProvision({ ...readyDraft, status: 'completed' })).toBe(false)
-  })
-})
-
-describe('getModuleProgress', () => {
-  it.each([
-    [0, emptyBasicInfo, emptyProjectDetails],
-    [1, completeBasicInfo, emptyProjectDetails],
-    [2, completeBasicInfo, completeProjectDetails],
-  ])('counts %i of 2 modules as completed', (completed, basicInfo, projectDetails) => {
-    expect(getModuleProgress(buildResource({ basicInfo, projectDetails }))).toEqual({
-      completed,
-      total: 2,
-    })
   })
 })

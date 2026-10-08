@@ -32,3 +32,14 @@ export const getModuleProgress = (resource: Resource) => ({
   completed: RESOURCE_MODULES.filter(({ isComplete }) => isComplete(resource)).length,
   total: RESOURCE_MODULES.length,
 })
+
+export type ModuleState = 'completed' | 'locked' | 'notStarted'
+
+// Modules are saved as a whole, so an incomplete module has never been saved.
+export const getModuleState = (
+  resource: Resource,
+  { isComplete, isLocked }: ResourceModule,
+): ModuleState => {
+  if (isComplete(resource)) return 'completed'
+  return isLocked(resource) ? 'locked' : 'notStarted'
+}
