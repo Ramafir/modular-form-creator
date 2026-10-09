@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { Button, Card, Input } from '../../../design-system'
 import { useCreateResource } from '../api/resourceMutations'
+import { BASIC_INFO_FIELD_LABELS } from '../model/labels'
 import { createResourceSchema, NAME_MAX_LENGTH } from '../model/schemas'
 import { resourcePaths } from '../paths'
 
@@ -41,7 +42,7 @@ export function CreateResourceForm() {
       <h2>New resource</h2>
       <Form onSubmit={onSubmit}>
         <Input
-          label="Resource name"
+          label={BASIC_INFO_FIELD_LABELS.resourceName}
           placeholder="e.g. Onboarding Portal"
           helperText="Letters, numbers, spaces and hyphens. The name cannot be changed later."
           maxLength={NAME_MAX_LENGTH}
