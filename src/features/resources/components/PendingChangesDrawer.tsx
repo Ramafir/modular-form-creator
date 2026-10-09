@@ -40,14 +40,19 @@ export function PendingChangesDrawer({
     close()
   }
 
-  const submit = () =>
-    replaceResource.mutate(
-      {
+  // `mutateAsync` instead of a `mutate` callback: once the saved data matches the
+  // buffer the banner (and this drawer) may unmount, and the buffer must still be cleared.
+  const submit = async () => {
+    try {
+      await replaceResource.mutateAsync({
         resourceId: resource.resourceId,
         payload: buildReplacePayload(resource, changes),
-      },
-      { onSuccess: finish },
-    )
+      })
+      finish()
+    } catch {
+      // The error is rendered from the mutation state.
+    }
+  }
 
   return (
     // `inert` keeps the closed drawer out of the tab order and the accessibility tree.
