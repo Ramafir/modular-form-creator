@@ -9,7 +9,7 @@ import type { ModuleKey, ModuleUpdate, Resource } from './types'
 
 export type FieldValue = string | readonly string[]
 
-export interface ModuleField {
+interface ModuleField {
   key: string
   label: string
   /** Value as stored by the API; used to detect changes. */

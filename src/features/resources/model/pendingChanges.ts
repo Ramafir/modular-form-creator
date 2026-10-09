@@ -13,7 +13,7 @@ export type PendingChanges = Partial<ResourceModules>
 /** Keyed by the resource `_id`, because the backend reuses numeric `resourceId`s. */
 export type PendingChangesState = Partial<Record<string, PendingChanges>>
 
-export type PendingChangesAction =
+type PendingChangesAction =
   | { type: 'stage'; resource: Resource; update: ModuleUpdate }
   | { type: 'discard'; resourceKey: string }
 
@@ -61,7 +61,7 @@ export function pendingChangesReducer(
   }
 }
 
-export interface ModuleChange {
+interface ModuleChange {
   moduleKey: ModuleKey
   fields: FieldChange[]
 }
