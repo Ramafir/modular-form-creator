@@ -1,0 +1,17 @@
+node_modules
+dist
+storybook-static
+coverage
+*.log
+
+# The backend has its own build context
+backend
+
+# Local env files would override the build-time VITE_API_URL
+.env*
+
+.git
+.claude
+.idea
+.vscode
+.DS_Store
